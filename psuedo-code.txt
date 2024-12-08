@@ -1,0 +1,152 @@
+//app.js
+
+1. create app.js
+2. npm init -y
+3. type: module
+4. .gitignore stuff
+5. npm i readline-sync
+6. import readline sync in app.js
+7. create main function ; call it immediately
+7.5****(imp) declare loggedInUser as null*** !!!!!!!make sure its declared before the infinite loop!!!!!!!
+8. infinite loop
+9. do process.clear, ----- to do --------
+10. give the options in an array
+11. map the array
+12. ask the user for their input using readline (store in variable)
+13. do switch cases with that variable
+14. for case 0: we have console and process.exit(0)
+15. do case 1-6 ; then default.
+16. do readline press enter to continue to come out of the loop
+17. create a db.json file, inside it create an object then a key called users: and then an empty array of it
+18. create users.js ; here will be our main logic of the code
+
+--------------------------------------------------------------------------------------------------------------
+
+
+//users.js
+
+1. import readline-sync and fs/promises
+
+//registerUser()
+
+1. read the db.json file ***(make sure to store it in variable)***
+2. parse it ***(make sure to store it in variable)***
+3. ask userinput for username and password
+4. check if username already exists (compare it with username in the database and the userinput)
+
+**[what if i were to compare the password too tho? ok so add x.password === passwordInput. this still registers the user. why? because the password condition doesnt match, so it immediately makes our if condition false and goes into the else block.. which is registered succesfully]**
+
+5. do if else if check then user already exists ; else new user registered 
+
+**{MAKE SURE U USE RETURN!!!!!!!!!!}**
+
+6. store a new object into a variable {username: userinput, password: userspassinput, todo: []} **leave empty array**
+7. push the object into the db using push
+8. stringify it
+9. write file
+
+--------------------------------------------------------------------------------------------------------------
+
+
+//loginUser()
+
+1. read file (make sure to store it in variable)
+2. parse it (make sure to store it in variable)
+3. ask userinput for their username and password
+4. take a variable check ; using "find" array method, check if userinput and passwordInput matches the username and password in the database (&&)
+5. if check is true then login is succesful
+
+***RETURN CHECK HERE!!!!***  NOT JUST RETURN !!!!!!*** ; if you dont return check it wont store checks value aka the database of the person youre logging in as.
+
+else invalid credentials were entered
+
+***RETURN NULL SINCE NO USER WAS FOUND!!!!***
+
+6. call the function under case 2 (store it in the variable we declared earlier ; loggedInUser)
+(this loggedInUser stores the object of the user logged in aka {username:saad.hn, password: 123, tasks:[]})
+
+--------------------------------------------------------------------------------------------------------------
+
+//addTask(loginUser) **argument important**
+
+1. using if condition only ; make sure the user is logged in first. 
+//if (!loginUser) -> go and log in 
+AND MAKE SURE YOU ADD RETURN.
+
+2. read db file (store it in variable)
+
+3. parse it (store it in variable)
+
+4. ask userinput for title and description
+
+5. using check variable if its the user logged in thats adding the task;
+ this makes sure that the person whos actually logged in gets to add a new task
+
+let check = convertDB.users.find((x)=> x.username === loginUser.username)
+
+*****check variable now stores the object of the user thats logged in.******** {username: , password: , tasks: []}
+
+6. create an object ; store it in newTask ; {id: Date.now(), title: input, description: input}
+
+7. push the new task in check variable and in the tasks array 
+
+check.tasks.push(newTask)
+
+8. stringify 
+
+9. writeFile
+
+10. add a confirmation msg
+
+11. when calling the function make sure to add await !!!!
+
+-------------------------------------------------------
+
+//editTask(loggedInUser)
+
+1. using if condition only ; make sure the user is logged in first. 
+//if (!loggedInUser) -> go and log in 
+AND MAKE SURE YOU ADD RETURN.
+
+2. read db and parse (both in variables)
+
+3. check if its actually the user whos logged in
+
+let check = convertDB.users.find((x) => x.username === loggedInUser.username)
+
+4. what if the logged in user doesnt have any tasks?
+add an if condition here
+
+if (check.tasks.length === 0) => no tasks FOUND
+
+5. now print the tasks using map
+check.tasks.map((x) => console.log(`${x.id} ${x.Title})) ***MAKE SURE ITS CAPITAL T BECAUSE IN MY database THE KEY HAS CAPITAL T***
+
+6. create a variable called userIDInput and ask user to enter id
+
+7. now check using variable checkID if the user entered id matches with the id in the database
+
+let checkID = check.tasks.find((x) => x.id === userIDInput)
+
+**this check id stores the entire object task which will be like {id: 1, Title: smth, Description: smth}***
+
+8. if it does then create an if condition with checkID as the argument
+
+if (checkID){
+  let newTitle = readline enter new title
+  let newDesc = readline new description
+
+  checkID.Title = newTitle || checkID.Title
+  checkID.Description = newDesc || checkID.Description
+
+  stringify in variable
+
+  write file 
+
+  add confirm message
+  
+} else {
+  print invalid id!!!!
+}
+
+***DONT FORGET THE ELSE PART!!!!!!!!!!!!*******
